@@ -1,4 +1,4 @@
 package lumora.tableBite.menuManagement.dto;
 
-public class CategoryDTO {
+public class sample {
 }
