@@ -1,10 +1,8 @@
 package lumora.tableBite.menuManagement.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
 import java.sql.Blob;
 
 @AllArgsConstructor
@@ -12,7 +10,7 @@ import java.sql.Blob;
 @Getter
 @Setter
 @Entity(name="image")
-public class image {
+public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
