@@ -31,7 +31,7 @@ public class Food {
     private Category category;
 
     @OneToMany(mappedBy = "food" , cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<image> images;
+    private List<Image> images;
 
     public Food(String name, String description, BigDecimal price, Cuisine cuisine, Category category) {
     }
