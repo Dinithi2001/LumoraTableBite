@@ -2,16 +2,52 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import table from "../assets/table.jpg"
 import staff from "../assets/staff.jpg"	
-import { ArrowRight, Delete, Edit, View } from 'lucide-react';
+import { ArrowRight, Delete, Edit, Edit2, Trash2, View } from 'lucide-react';
 import AddCard from '../components/AddCard';
 import { useNavigate } from 'react-router-dom';
 
+const initialMenuItems = [
+  {
+    id: '67869052',
+    name: 'Nimal',
+    date: '2025/03/24',
+    amount: 'LKR.2500',
+    status: 'completed',
+
+  },
+  {
+    id: '68970163',
+    name: 'Kamal',
+    date: '2025/03/24',
+    amount: 'LKR.2500',
+    status: 'pending',
+
+  },
+  {
+    id: '66758941',
+    name: 'Grill Sandwich',
+    date: '2025/03/24',
+    amount: 'LKR.2500',
+    status: 'pending',
+   
+  }
+];
+
 const AdminDashboard = () => {
 
+  const [searchTerm, setSearchTerm] = useState('');
+  const [menuItems] = useState(initialMenuItems);
   const navigate = useNavigate();
 
+  const filteredItems = menuItems.filter(item =>
+    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.cuisine.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    item.category.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+
     return (
-        <div className=' min-h-screen bg-gray-100'>
+        <div className=' min-h-screen bg-[#FFFBF0] p-2'>
             <Header name={"Log Out"}/>
             <div className='grid grid-cols-3 gap-5 p-10 text-4xl'>
             <AddCard 
@@ -36,40 +72,77 @@ const AdminDashboard = () => {
             </div>
             <div>
                 <span className='font-medium text-4xl'>Orders</span>
-                <hr/>
             </div>
-            <section>
-            <table className='shadow  w-full mt-5'>
-              <thead className='bg-[#EBEBEB] h-12'>
-                <tr className='text-center'>
-                  <th>Order_id</th>
-                  <th>Customer</th>
-                  <th>Date</th>
-                  <th>Amount</th>
-                  <th>Status</th>
-                  <th colSpan={3}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className='text-center'>
-                  <td>1</td>
-                  <td>John Doe</td>
-                  <td>2025/03/24</td>
-                  <td>4500</td>
-                  <td>completed</td>
-                  <td>
-                    <button className=' text-green-500 p-2 rounded-lg w-16 flex justify-center items-center'><Edit/></button>
-                  </td>
-                  <td>
-                    <button className=' text-blue-500 p-2 rounded-lg w-16 flex justify-center items-center'><View/></button>
-                  </td>
-                  <td>
-                    <button className='text-red-500 p-2 rounded-lg w-16 flex justify-center items-center'><Delete/></button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
+           
+          {filteredItems.length === 0 ? (
+          <div className="text-center py-12 bg-white rounded-lg shadow">
+            <p className="text-gray-500 text-lg">No items found matching your search.</p>
+          </div>
+        ) : (
+          <div className="bg-white rounded-lg shadow-lg overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="min-w-full divide-y divide-gray-200">
+                <thead className="bg-gray-50">
+                  <tr>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Order Id</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Date</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Amount</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
+                    <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200">
+                  {filteredItems.map((item) => (
+                    <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-150">
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex items-center">
+                          <div className="ml-4">
+                            <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <span
+                          className={`px-3 py-1 text-xs font-medium rounded-full ${
+                            item.category === 'Main'
+                              ? 'bg-green-100 text-green-800'
+                              : 'bg-yellow-100 text-yellow-800'
+                          }`}
+                        >
+                          {item.category}
+                        </span>
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.id}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.name}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                        ${item.date}
+                      </td>
+                      <td className="px-6 py-4 whitespace-nowrap">
+                        <div className="flex space-x-4">
+                          <button
+                            onClick={() => handleEditItem(item.id)}
+                            className="text-green-600 hover:text-green-800 transition-colors duration-200"
+                            aria-label="Edit item"
+                          >
+                            <Edit2 size={20} />
+                          </button>
+                          <button
+                            onClick={() => handleDeleteItem(item.id)}
+                            className="text-red-600 hover:text-red-800 transition-colors duration-200"
+                            aria-label="Delete item"
+                          >
+                            <Trash2 size={20} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
              
       
       

@@ -1,6 +1,10 @@
+// pages/Menu.js
 import React, { useState } from 'react';
-import { Search, PlusCircle, Edit2, Trash2 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Search, PlusCircle, Edit2, Trash2, X } from 'lucide-react';
 import Header from '../components/Header';
+import AddCategoryModel from './AddCategoryModel';
+import AddFood from './AddFood';
 
 const initialMenuItems = [
   {
@@ -32,6 +36,9 @@ const initialMenuItems = [
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [menuItems] = useState(initialMenuItems);
+  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
+  const [isAddFoodModalOpen,setAddFoodModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const filteredItems = menuItems.filter(item =>
     item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -39,29 +46,44 @@ const Menu = () => {
     item.category.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleAddCategory = () => console.log('Add Category clicked');
-  const handleAddProduct = () => console.log('Add Product clicked');
+  const handleAddCategory = () => {
+    setIsCategoryModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsCategoryModalOpen(false);
+  };
+
+  const handleCloseAddFoodModal = () => {
+    setAddFoodModalOpen(false);
+  };
+
+  const handleAddProduct = () => {
+    setAddFoodModalOpen(true);
+  };
+
   const handleEditItem = (id) => console.log('Edit item with id:', id);
   const handleDeleteItem = (id) => console.log('Delete item with id:', id);
 
   return (
-    <div className="min-h-screen bg-gray-100">
-      <Header name={"Home"}/>
+    <div className="min-h-screen bg-[#FFFBF0] p-2">
+      <Header name={"Home"} onclick={()=>navigate('/')}/>
+      
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Menu</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Menu Management</h1>
           <div className="flex space-x-3 w-full sm:w-auto">
             <button
               onClick={handleAddCategory}
-              className="flex-1 sm:flex-none bg-[#4B2E1E] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-green-700 transition-all duration-200 shadow-md"
+              className="flex-1 sm:flex-none bg-[#4B2E1E] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-yellow-700 transition-all duration-200 shadow-md"
             >
               <PlusCircle size={20} />
               <span>Add Category</span>
             </button>
             <button
               onClick={handleAddProduct}
-              className="flex-1 sm:flex-none bg-[#4B2E1E] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-blue-700 transition-all duration-200 shadow-md"
+              className="flex-1 sm:flex-none bg-[#4B2E1E] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-yellow-700 transition-all duration-200 shadow-md"
             >
               <PlusCircle size={20} />
               <span>Add Product</span>
@@ -157,8 +179,21 @@ const Menu = () => {
           </div>
         )}
       </div>
+      {isCategoryModalOpen && (
+        <AddCategoryModel
+          onClose={handleCloseModal}
+          title="Add Category"
+        />
+      )}
+       {isAddFoodModalOpen && (
+        <AddFood
+          onClose={handleCloseAddFoodModal}
+          title="Add Food"
+        />
+      )}
     </div>
   );
+  
 };
 
 export default Menu;
