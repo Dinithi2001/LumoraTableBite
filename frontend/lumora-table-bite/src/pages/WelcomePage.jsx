@@ -1,0 +1,87 @@
+import React, { useState } from 'react'
+import welcomeImage from '../assets/welcome.jpg'
+import Header from '../components/Header';
+
+const WelcomePage = () => {
+  const [formData, setFormData] = useState({
+    name: '',
+    phoneNumber: ''
+  });
+
+  const handleLogout = () => {
+    // Add logout functionality here
+    console.log('Logging out...');
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    console.log('Form submitted:', formData);
+    // Add form submission logic here
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  return (
+    <div className="relative w-screen h-screen overflow-hidden m-0 p-0">
+        <img 
+          src={welcomeImage} 
+          alt="Welcome to Lumora Table Bite"
+          className="w-full h-full object-cover"
+        />
+        <div className="absolute top-0 left-0 right-0 p-2">
+          <Header name={"Log out"} onclick={handleLogout}/>
+        </div>
+        
+        {/* Welcome Form */}
+        <div className="absolute inset-0 flex items-center justify-center opacity-95">
+          <div className="bg-[#D4AF37]/90 rounded-3xl p-8 max-w-sm w-full mx-4 backdrop-blur-sm">
+            <h1 className="text-5xl mb-4 text-center font-extrabold inspiration-regular">Welcome</h1>
+            <p className="text-center mb-6 text-[#4B2E1E]">
+              Enter your details to get started with your order
+            </p>
+            
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <div>
+                <label className="block text-[#4B2E1E] mb-2">Name:</label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg border border-[#4B2E1E]/20 focus:outline-none focus:border-[#4B2E1E] bg-white"
+                  required
+                />
+              </div>
+              
+              <div>
+                <label className="block text-[#4B2E1E] mb-2">Phone Number:</label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
+                  className="w-full px-4 py-2 rounded-lg border border-[#4B2E1E]/20 focus:outline-none focus:border-[#4B2E1E] bg-white"
+                  required
+                />
+              </div>
+              
+              <button
+                type="submit"
+                className="w-full bg-[#4B2E1E] text-white py-3 rounded-lg mt-6 hover:bg-[#4B2E1E]/90 transition-colors"
+              >
+                Continue
+              </button>
+            </form>
+          </div>
+        </div>
+    </div>
+  )
+}
+
+export default WelcomePage

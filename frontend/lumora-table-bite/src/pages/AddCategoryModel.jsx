@@ -44,7 +44,7 @@ const AddCategoryModel = ({ onClose, title = "Add Category" }) => {
         >
             <div className='w-full max-w-md mx-4 sm:mx-0 sm:w-2/3 md:w-1/2 lg:w-1/3 bg-white rounded-2xl max-h-[90vh] flex flex-col'>
                 <header className='flex justify-between items-center p-3 bg-[#4B2E1E] rounded-t-2xl border shrink-0'>
-                    <span className='text-xl sm:text-2xl text-white'>{title}</span>
+                    <span className='text-sm sm:text-xl text-white'>{title}</span>
                 </header>
 
                 <form 
@@ -73,7 +73,7 @@ const AddCategoryModel = ({ onClose, title = "Add Category" }) => {
                     </div>
                     <div className='flex flex-col sm:flex-row justify-between gap-3 sm:gap-0 px-1 py-1'>
                         <button
-                            className='w-full sm:w-48 h-12 bg-[#4B2E1E] text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 text-xl'
+                            className='w-full sm:w-48 h-12 bg-[#4B2E1E] text-white rounded-lg hover:bg-yellow-700 transition-colors duration-200 text-base font-medium'
                             type='submit'
                         >
                             Save Category
@@ -81,7 +81,7 @@ const AddCategoryModel = ({ onClose, title = "Add Category" }) => {
                         <button
                             type='button'
                             onClick={onClose}
-                            className='w-full sm:w-auto px-6 py-2 text-xl bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200'
+                            className='w-full sm:w-auto px-6 py-2 text-base font-medium bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition-colors duration-200'
                         >
                             Cancel
                         </button>

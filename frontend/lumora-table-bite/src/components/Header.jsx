@@ -10,7 +10,7 @@ const Header = ({name,onclick}) => {
     >
     </img>
     <span className='font-bold text-3xl inspiration-regular'>
-        Lomora TableBite
+        Lumora TableBite
     </span>
     <button 
     className='flex items-center gap-5 bg-[#4B2E1E] rounded-lg px-4 py-2 ml-auto mr-5'
