@@ -1,28 +1,34 @@
 package lumora.tableBite.menuManagement.service.impl;
 
+import lombok.RequiredArgsConstructor;
+import lumora.tableBite.menuManagement.dto.ImageDTO;
 import lumora.tableBite.menuManagement.dto.request.AddFoodRequestDTO;
 import lumora.tableBite.menuManagement.dto.request.FoodUpdateRequestDTO;
+import lumora.tableBite.menuManagement.dto.response.FoodDTO;
 import lumora.tableBite.menuManagement.entity.Category;
 import lumora.tableBite.menuManagement.entity.Food;
+import lumora.tableBite.menuManagement.entity.Image;
 import lumora.tableBite.menuManagement.entity.enums.Cuisine;
 import lumora.tableBite.menuManagement.exception.FoodNotFountException;
 import lumora.tableBite.menuManagement.repo.CategoryRepo;
 import lumora.tableBite.menuManagement.repo.FoodRepo;
+import lumora.tableBite.menuManagement.repo.ImageRepo;
 import lumora.tableBite.menuManagement.service.FoodService;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class FoodServiceIMPL implements FoodService {
 
-    @Autowired
-    private FoodRepo foodRepo;
 
-    @Autowired
-    private CategoryRepo categoryRepo;
+    private final FoodRepo foodRepo;
+    private final CategoryRepo categoryRepo;
+    private final ModelMapper modelMapper;
+    private final ImageRepo imageRepo;
 
     @Override
     public Food addFood(AddFoodRequestDTO food) {
@@ -107,5 +113,21 @@ public class FoodServiceIMPL implements FoodService {
     @Override
     public List<Food> getFoodsByCategoryAndName(String category, String name) {
         return foodRepo.findByCategoryNameAndName(category,name);
+    }
+
+    @Override
+    public List<FoodDTO> getConvertedFoods(List<Food> foods) {
+        return foods.stream().map(this::convertToDto).toList();
+    }
+
+    @Override
+    public FoodDTO convertToDto(Food food){
+        FoodDTO foodDTO = modelMapper.map(food,FoodDTO.class);
+        List<Image> images = imageRepo.findByFoodId(food.getId());
+        List<ImageDTO> imageDTOS = images.stream()
+                .map(image -> modelMapper.map(image,ImageDTO.class))
+                .toList();
+        foodDTO.setImages(imageDTOS);
+        return foodDTO;
     }
 }

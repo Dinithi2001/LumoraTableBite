@@ -47,16 +47,17 @@ public class ImageServiceIMPL implements ImageService {
                image.setImage(new SerialBlob(file.getBytes()));
                image.setFood(food);
 
-               String buildDownloadURL = "/api/v1/images/image/download";
+               String buildDownloadURL = "/api/v1/images/image/download/";
                String downloadURL = buildDownloadURL + image.getId();
                image.setDownloadUrl(downloadURL);
                Image savedImage = imageRepo.save(image);
-               savedImage.setDownloadUrl(buildDownloadURL + savedImage.getId());
+
+               savedImage.setDownloadUrl(buildDownloadURL+savedImage.getId());
                imageRepo.save(savedImage);
 
                ImageDTO imageDTO = new ImageDTO();
                imageDTO.setId(savedImage.getId());
-               imageDTO.setImageName(savedImage.getFileName());
+               imageDTO.setFileName(savedImage.getFileName());
                imageDTO.setDownloadUrl(savedImage.getDownloadUrl());
                savedImageDTOList.add(imageDTO);
 

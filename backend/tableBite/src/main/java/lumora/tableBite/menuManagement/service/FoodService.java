@@ -2,6 +2,7 @@ package lumora.tableBite.menuManagement.service;
 
 import lumora.tableBite.menuManagement.dto.request.AddFoodRequestDTO;
 import lumora.tableBite.menuManagement.dto.request.FoodUpdateRequestDTO;
+import lumora.tableBite.menuManagement.dto.response.FoodDTO;
 import lumora.tableBite.menuManagement.entity.Food;
 import lumora.tableBite.menuManagement.entity.enums.Cuisine;
 
@@ -19,4 +20,8 @@ public interface FoodService {
     List<Food> getFoodsByCategoryAndCuisine(String category, Cuisine cuisine);
     List<Food> getFoodsByName(String name);
     List<Food> getFoodsByCategoryAndName(String category, String name);
+
+    List<FoodDTO> getConvertedFoods(List<Food> foods);
+
+    FoodDTO convertToDto(Food food);
 }

@@ -1,5 +1,6 @@
 package lumora.tableBite.menuManagement.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,10 +20,12 @@ public class Category {
 
     private String name;
 
+    @JsonIgnore
     @OneToMany(mappedBy = "category")
     private List<Food> foods;
 
 
     public Category(String name) {
+        this.name = name;
     }
 }

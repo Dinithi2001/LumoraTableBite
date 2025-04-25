@@ -34,5 +34,10 @@ public class Food {
     private List<Image> images;
 
     public Food(String name, String description, BigDecimal price, Cuisine cuisine, Category category) {
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.cuisine = cuisine;
+        this.category = category;
     }
 }
