@@ -6,6 +6,7 @@ import AddFood from './pages/AddFood'
 import WelcomePage from './pages/WelcomePage'
 import SelectTablePage from './pages/SelectTablePage'
 import KitchenInterface from './pages/KitchenInterface'
+import AddTable from './pages/AddTable'
 
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             <Route path='/welcome' element={<WelcomePage/>}/>
             <Route path='/select-table' element={<SelectTablePage/>}/>
             <Route path='/kitchen' element={<KitchenInterface/>}/>
+            <Route path="/table" element={<AddTable/>} />
           </Routes>
           
           

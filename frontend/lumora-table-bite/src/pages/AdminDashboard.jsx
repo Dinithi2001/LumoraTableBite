@@ -61,7 +61,10 @@ const AdminDashboard = () => {
             <AddCard
                 image={table}
                 title={"Table"}
-                description={"Add Tables"}/>
+                description={"Add Tables"}
+                onClick={() => {
+                  navigate("/table");
+                }}/>
             <AddCard
                 image={staff}
                 title={"Staff"}

@@ -1,22 +1,32 @@
 import React, { useState } from 'react'
 import welcomeImage from '../assets/welcome.jpg'
 import Header from '../components/Header';
+import { useNavigate } from 'react-router-dom';
+import { customerService } from '../services/customerService';
+import { toast } from 'react-hot-toast';
 
 const WelcomePage = () => {
   const [formData, setFormData] = useState({
     name: '',
     phoneNumber: ''
   });
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     // Add logout functionality here
     console.log('Logging out...');
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log('Form submitted:', formData);
-    // Add form submission logic here
+    try {
+      const customer = await customerService.addCustomer(formData);
+      toast.success('Customer details saved successfully!');
+      navigate('/select-table');
+    } catch (error) {
+      console.error('Error saving customer:', error);
+      toast.error(error.response?.data?.message || 'Failed to save customer details');
+    }
   };
 
   const handleChange = (e) => {
