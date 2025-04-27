@@ -20,6 +20,9 @@ public class Table {
 
     private String name;
 
+    @Column(name = "is_available")
+    private boolean status;
+
     @OneToOne
     @JsonIgnore
     @JoinColumn(name = "table_id")
