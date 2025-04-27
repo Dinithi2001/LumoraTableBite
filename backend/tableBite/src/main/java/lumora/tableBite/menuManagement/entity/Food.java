@@ -26,7 +26,7 @@ public class Food {
     @Enumerated(EnumType.STRING)
     private Cuisine cuisine;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;
 

@@ -18,6 +18,7 @@ import static org.springframework.http.HttpStatus.*;
 
 @RequiredArgsConstructor
 @RestController
+@CrossOrigin
 @RequestMapping("${api.prefix}/foods")
 public class FoodController {
 
