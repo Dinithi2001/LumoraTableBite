@@ -50,6 +50,7 @@ const SelectTablePage = () => {
             </button>
           ))}
         </div>
+        
       </div>
     </div>
   )

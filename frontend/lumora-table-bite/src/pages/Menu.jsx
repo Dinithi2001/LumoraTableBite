@@ -1,58 +1,55 @@
 // pages/Menu.js
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Search, PlusCircle, Edit2, Trash2, X } from 'lucide-react';
 import Header from '../components/Header';
-import AddCategoryModel from './AddCategoryModel';
 import AddFood from './AddFood';
-
-const initialMenuItems = [
-  {
-    id: '67869052',
-    name: 'Chicken Popeyes',
-    category: 'Main',
-    cuisine: 'Sri Lankan',
-    price: 30.00,
-    image: 'https://images.unsplash.com/photo-1626082927389-6cd097cdc6ec?auto=format&fit=crop&w=300'
-  },
-  {
-    id: '68970163',
-    name: 'Bison Burgers',
-    category: 'Starter',
-    cuisine: 'Sri Lankan',
-    price: 40.00,
-    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=300'
-  },
-  {
-    id: '66758941',
-    name: 'Grill Sandwich',
-    category: 'Main',
-    cuisine: 'Indian',
-    price: 20.00,
-    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?auto=format&fit=crop&w=300'
-  }
-];
+import { foodService } from '../services/foodService';
+import { toast } from 'react-hot-toast';
 
 const Menu = () => {
   const [searchTerm, setSearchTerm] = useState('');
-  const [menuItems] = useState(initialMenuItems);
-  const [isCategoryModalOpen, setIsCategoryModalOpen] = useState(false);
-  const [isAddFoodModalOpen,setAddFoodModalOpen] = useState(false);
+  const [menuItems, setMenuItems] = useState([]);
+  const [isAddFoodModalOpen, setAddFoodModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [selectedFood, setSelectedFood] = useState(null);
   const navigate = useNavigate();
 
-  const filteredItems = menuItems.filter(item =>
-    item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.cuisine.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    item.category.toLowerCase().includes(searchTerm.toLowerCase())
-  );
-
-  const handleAddCategory = () => {
-    setIsCategoryModalOpen(true);
+  const fetchFoods = async () => {
+    try {
+      const foods = await foodService.getAllFoods();
+      setMenuItems(foods);
+      setError(null);
+    } catch (err) {
+      console.error('Error fetching foods:', err);
+      setError('Failed to load menu items. Please try again later.');
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleCloseModal = () => {
-    setIsCategoryModalOpen(false);
-  };
+  useEffect(() => {
+    fetchFoods();
+  }, []);
+
+  const filteredItems = menuItems.filter(item => {
+    if (!searchTerm) return true;
+    
+    const searchLower = searchTerm.toLowerCase().trim();
+    const nameLower = item.name?.toLowerCase() || '';
+    const descriptionLower = item.description?.toLowerCase() || '';
+    const cuisineLower = item.cuisine?.toLowerCase() || '';
+    const categoryLower = item.category?.name?.toLowerCase() || '';
+
+    return (
+      nameLower.includes(searchLower) ||
+      descriptionLower.includes(searchLower) ||
+      cuisineLower.includes(searchLower) ||
+      categoryLower.includes(searchLower)
+    );
+  });
 
   const handleCloseAddFoodModal = () => {
     setAddFoodModalOpen(false);
@@ -62,25 +59,81 @@ const Menu = () => {
     setAddFoodModalOpen(true);
   };
 
-  const handleEditItem = (id) => console.log('Edit item with id:', id);
-  const handleDeleteItem = (id) => console.log('Delete item with id:', id);
+  const handleEditItem = async (id) => {
+    try {
+      const food = await foodService.getFoodById(id);
+      setSelectedFood(food);
+      setIsEditModalOpen(true);
+    } catch (error) {
+      toast.error('Failed to fetch food details');
+      console.error('Error fetching food details:', error);
+    }
+  };
+
+  const handleDeleteItem = async (id) => {
+    if (window.confirm('Are you sure you want to delete this item?')) {
+      try {
+        await foodService.deleteFood(id);
+        setMenuItems(prevItems => prevItems.filter(item => item.id !== id));
+        toast.success('Food item deleted successfully');
+      } catch (error) {
+        toast.error('Failed to delete food item');
+        console.error('Error deleting item:', error);
+      }
+    }
+  };
+
+  const handleUpdateFood = async (updatedFood) => {
+    try {
+      const updated = await foodService.updateFood(updatedFood.id, updatedFood);
+      setMenuItems(prevItems =>
+        prevItems.map(item => item.id === updated.id ? updated : item)
+      );
+      setIsEditModalOpen(false);
+      setSelectedFood(null);
+      toast.success('Food item updated successfully');
+    } catch (error) {
+      toast.error('Failed to update food item');
+      console.error('Error updating food:', error);
+    }
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+    setSelectedFood(null);
+  };
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#FFFBF0] p-2">
+        <Header name={"Home"} onclick={() => navigate('/')} />
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-xl">Loading menu items...</div>
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-[#FFFBF0] p-2">
+        <Header name={"Home"} onclick={() => navigate('/')} />
+        <div className="flex items-center justify-center h-screen">
+          <div className="text-xl text-red-600">{error}</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-[#FFFBF0] p-2">
-      <Header name={"Home"} onclick={()=>navigate('/')}/>
+      <Header name={"Home"} onclick={() => navigate('/')} />
       
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header Section */}
         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6">
           <h1 className="text-3xl font-bold text-gray-900 mb-4 sm:mb-0">Menu Management</h1>
           <div className="flex space-x-3 w-full sm:w-auto">
-            <button
-              onClick={handleAddCategory}
-              className="flex-1 sm:flex-none bg-[#4B2E1E] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-yellow-700 transition-all duration-200 shadow-md"
-            >
-              <PlusCircle size={20} />
-              <span>Add Category</span>
-            </button>
             <button
               onClick={handleAddProduct}
               className="flex-1 sm:flex-none bg-[#4B2E1E] text-white px-4 py-2 rounded-lg flex items-center justify-center space-x-2 hover:bg-yellow-700 transition-all duration-200 shadow-md"
@@ -127,31 +180,44 @@ const Menu = () => {
                     <tr key={item.id} className="hover:bg-gray-50 transition-colors duration-150">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex items-center">
-                          <img
-                            className="h-14 w-14 rounded-lg object-cover shadow-sm"
-                            src={item.image}
-                            alt={item.name}
-                          />
+                          {item.images && item.images.length > 0 ? (
+                            <img
+                              className="h-14 w-14 rounded-lg object-cover shadow-sm"
+                              src={`http://localhost:8095${item.images[0].downloadUrl}`}
+                              alt={item.name}
+                              onError={(e) => {
+                                e.target.onerror = null; // Prevent infinite loop
+                                e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTYiIGhlaWdodD0iNTYiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjU2IiBoZWlnaHQ9IjU2IiBmaWxsPSIjZjBmMGYwIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJBcmlhbCIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzY2NiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPk5vIEltYWdlPC90ZXh0Pjwvc3ZnPg==';
+                              }}
+                            />
+                          ) : (
+                            <div className="h-14 w-14 rounded-lg bg-gray-100 flex items-center justify-center">
+                              <span className="text-xs text-gray-500">No Image</span>
+                            </div>
+                          )}
                           <div className="ml-4">
                             <div className="text-sm font-medium text-gray-900">{item.name}</div>
+                            {item.description && (
+                              <div className="text-xs text-gray-500">{item.description}</div>
+                            )}
                           </div>
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <span
                           className={`px-3 py-1 text-xs font-medium rounded-full ${
-                            item.category === 'Main'
+                            item.category?.name === 'Main'
                               ? 'bg-green-100 text-green-800'
                               : 'bg-yellow-100 text-yellow-800'
                           }`}
                         >
-                          {item.category}
+                          {item.category?.name || 'N/A'}
                         </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.id}</td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.cuisine}</td>
+                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">{item.cuisine || 'N/A'}</td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        ${item.price.toFixed(2)}
+                        LKR.{item.price.toFixed(2)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="flex space-x-4">
@@ -179,21 +245,24 @@ const Menu = () => {
           </div>
         )}
       </div>
-      {isCategoryModalOpen && (
-        <AddCategoryModel
-          onClose={handleCloseModal}
-          title="Add Category"
-        />
-      )}
-       {isAddFoodModalOpen && (
+      {isAddFoodModalOpen && (
         <AddFood
           onClose={handleCloseAddFoodModal}
           title="Add Food"
+          onSuccess={fetchFoods}
+        />
+      )}
+      {isEditModalOpen && selectedFood && (
+        <AddFood
+          onClose={handleCloseEditModal}
+          title="Edit Food"
+          initialData={selectedFood}
+          onSubmit={handleUpdateFood}
+          isEdit={true}
         />
       )}
     </div>
   );
-  
 };
 
 export default Menu;
