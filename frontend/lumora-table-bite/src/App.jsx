@@ -7,8 +7,8 @@ import WelcomePage from './pages/WelcomePage'
 import SelectTablePage from './pages/SelectTablePage'
 import KitchenInterface from './pages/KitchenInterface'
 import AddTable from './pages/AddTable'
-
-
+import Home from './pages/Home'
+import CartPage from './pages/CartPage'
 function App() {
 
   return (
@@ -22,6 +22,8 @@ function App() {
             <Route path='/select-table' element={<SelectTablePage/>}/>
             <Route path='/kitchen' element={<KitchenInterface/>}/>
             <Route path="/table" element={<AddTable/>} />
+            <Route path="/home" element={<Home/>} />
+            <Route path="/cart" element={<CartPage/>} />
           </Routes>
           
           

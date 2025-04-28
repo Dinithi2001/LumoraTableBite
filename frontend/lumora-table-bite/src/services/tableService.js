@@ -89,8 +89,7 @@ const tableService = {
     try {
       console.log('Adding table with data:', tableData);
       const response = await api.post(`${API_PREFIX}/tables/add`, {
-        number: tableData.number,
-        status: tableData.status === 'Reserved' ? true : false
+        name: tableData.name
       });
       console.log('Add table response:', response.data);
       return response.data.data;

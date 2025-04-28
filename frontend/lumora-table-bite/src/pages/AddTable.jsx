@@ -136,13 +136,15 @@ const AddTable = () => {
         // TODO: Implement update table functionality when backend supports it
         toast.error('Update functionality is not yet available');
       } else {
-        const newTable = await tableService.addTable({
-          number: tableData.number,
-          status: tableData.status
+        console.log('Creating new table with data:', {
+          name: tableData.name // Make sure we're sending 'name' not 'number'
         });
-        console.log('New table created:', newTable);
-        setTables([...tables, newTable]);
+        await tableService.addTable({
+          name: tableData.name // Changed to use 'name'
+        });
         toast.success('Table added successfully');
+        // Fetch the latest tables data after adding
+        await fetchTables();
       }
       setAddTableModalOpen(false);
     } catch (error) {

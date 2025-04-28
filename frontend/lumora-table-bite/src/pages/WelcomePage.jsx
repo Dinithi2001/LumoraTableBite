@@ -13,8 +13,7 @@ const WelcomePage = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Add logout functionality here
-    console.log('Logging out...');
+    navigate('/');
   };
 
   const handleSubmit = async (e) => {

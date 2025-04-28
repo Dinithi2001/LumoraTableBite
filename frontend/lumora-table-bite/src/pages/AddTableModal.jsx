@@ -7,13 +7,13 @@ const AddTableModal = ({ onClose, title = 'Add New Table', initialData, onSubmit
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
-    number: '',
+    name: '', // Changed from 'number' to 'name' to match backend
   });
 
   useEffect(() => {
     if (isEdit && initialData) {
       setFormData({
-        number: initialData.number || '',
+        name: initialData.name || initialData.number || '', // Handle both cases for backward compatibility
       });
     }
   }, [isEdit, initialData]);
@@ -29,7 +29,7 @@ const AddTableModal = ({ onClose, title = 'Add New Table', initialData, onSubmit
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (!formData.number) {
+    if (!formData.name) { // Changed from 'number' to 'name'
       toast.error("Please enter a table name");
       return;
     }
@@ -70,12 +70,12 @@ const AddTableModal = ({ onClose, title = 'Add New Table', initialData, onSubmit
         <form onSubmit={handleSubmit} className="p-6 space-y-4 flex-1 overflow-auto">
           {/* Table Name */}
           <div>
-            <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor='number'>Table Name</label>
+            <label className="block text-gray-700 text-sm font-medium mb-1" htmlFor='name'>Table Name</label>
             <input
               className="w-full px-4 py-2 rounded-lg bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-[#4B2E1E] focus:border-transparent text-sm"
               type="text"
-              name="number"
-              value={formData.number}
+              name="name" // Changed from 'number' to 'name'
+              value={formData.name} // Changed from 'number' to 'name'
               onChange={handleInputChange}
               placeholder="Enter table name"
               required
@@ -103,4 +103,4 @@ const AddTableModal = ({ onClose, title = 'Add New Table', initialData, onSubmit
   );
 };
 
-export default AddTableModal; 
+export default AddTableModal;

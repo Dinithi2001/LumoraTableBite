@@ -3,12 +3,16 @@ import welcomeImage from '../assets/selecttable.jpg'
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
 import tableService from '../services/tableService';
+import PlateCountModal from '../components/PlateCountModal';
 
 const SelectTablePage = () => {
   const navigate = useNavigate();
   const [tables, setTables] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showModal, setShowModal] = useState(false);
+  const [selectedTable, setSelectedTable] = useState(null);
+  const [plates, setPlates] = useState('');
 
   useEffect(() => {
     const fetchTables = async () => {
@@ -35,9 +39,9 @@ const SelectTablePage = () => {
     navigate('/welcome');
   };
 
-  const handleTableSelect = (tableNumber) => {
-    // Handle table selection - can be extended to navigate to menu or store selection
-    console.log(`Selected table ${tableNumber}`);
+  const handleTableSelect = (table) => {
+    setSelectedTable(table);
+    setShowModal(true);
   };
 
   if (isLoading) {
@@ -101,7 +105,7 @@ const SelectTablePage = () => {
           {tables.map((table) => (
             <button
               key={table.id}
-              onClick={() => handleTableSelect(table.number)}
+              onClick={() => handleTableSelect(table)}
               className="w-[180px] h-[180px] rounded-full bg-[#D4AF37]/80 hover:bg-[#D4AF37] 
                        transition-all duration-200 flex items-center justify-center
                        text-white text-2xl font-semibold shadow-lg backdrop-blur-xs border-2 border-white/20"
@@ -112,6 +116,16 @@ const SelectTablePage = () => {
         </div>
         
       </div>
+      <PlateCountModal
+        open={showModal}
+        onClose={() => setShowModal(false)}
+        plates={plates}
+        setPlates={setPlates}
+        onSubmit={() => {
+          setShowModal(false);
+          // handle next step here (e.g., navigate to menu)
+        }}
+      />
     </div>
   )
 }

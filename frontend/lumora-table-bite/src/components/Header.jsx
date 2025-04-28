@@ -3,7 +3,8 @@ import logo from '../assets/logo.png'
 import { LogOut } from 'lucide-react';
 
 const Header = ({name,onclick}) => {
-  return (<div className='bg-[#D4AF37] h-20  rounded-lg flex items-center gap-4 justify-between'>
+  return (
+  <div className='bg-[#D4AF37] h-20  rounded-lg flex items-center gap-4 justify-between'>
     <img
        src={logo} 
        className='w-15 h-15 ml-4'
