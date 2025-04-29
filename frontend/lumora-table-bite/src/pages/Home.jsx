@@ -63,7 +63,7 @@ const Home = () => {
             <span className='text-[#4B2E1E] font-medium cursor-pointer'>Contact</span>
           </div>
           {/* Right: Login */}
-          <Link to="/welcome" className='flex items-center gap-5 bg-[#4B2E1E] rounded-lg px-4 py-2 text-white font-medium shadow'>
+          <Link to="/login" className='flex items-center gap-5 bg-[#4B2E1E] rounded-lg px-4 py-2 text-white font-medium shadow'>
             Log in
           </Link>
         </div>

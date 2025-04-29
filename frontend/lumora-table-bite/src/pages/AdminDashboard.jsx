@@ -48,7 +48,7 @@ const AdminDashboard = () => {
 
     return (
         <div className=' min-h-screen bg-[#FFFBF0] p-2'>
-            <Header name={"Log Out"}/>
+            <Header name={"Log Out"} handleLogout={() => navigate('/')}/>
             <div className='grid grid-cols-3 gap-5 p-10 text-4xl'>
             <AddCard 
                 image="https://images.unsplash.com/photo-1504674900247-0877df9cc836?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8YmVhY2h8ZW58MHx8MHx8&w=1000&q=80"

@@ -10,11 +10,8 @@ const WelcomePage = () => {
     name: '',
     phoneNumber: ''
   });
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    navigate('/');
-  };
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -44,7 +41,7 @@ const WelcomePage = () => {
           className="w-full h-full object-cover"
         />
         <div className="absolute top-0 left-0 right-0 p-2">
-          <Header name={"Log out"} onclick={handleLogout}/>
+          <Header name={"Log out"} handleLogout={() => navigate('/')}/>
         </div>
         
         {/* Welcome Form */}

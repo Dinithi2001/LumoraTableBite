@@ -1,8 +1,16 @@
 import React from 'react'
 import logo from '../assets/logo.png'
 import { LogOut } from 'lucide-react';
+import {useNavigate } from 'react-router-dom';
 
-const Header = ({name,onclick}) => {
+const Header = ({name,handleLogout}) => {
+
+  const navigate = useNavigate();
+
+  // const handleLogout = () => {
+  //   navigate('/');
+  // };
+
   return (
   <div className='bg-[#D4AF37] h-20  rounded-lg flex items-center gap-4 justify-between'>
     <img
@@ -15,7 +23,7 @@ const Header = ({name,onclick}) => {
     </span>
     <button 
     className='flex items-center gap-5 bg-[#4B2E1E] rounded-lg px-4 py-2 ml-auto mr-5'
-    onClick={onclick}>
+    onClick={handleLogout}>
         <span className='text-white'>{name}</span>
         {/* <LogOut className="w-5 h-5 ml-auto text-white" /> */}
     </button>

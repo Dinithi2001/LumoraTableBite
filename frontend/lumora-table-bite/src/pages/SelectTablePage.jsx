@@ -123,6 +123,7 @@ const SelectTablePage = () => {
         setPlates={setPlates}
         onSubmit={() => {
           setShowModal(false);
+          navigate('/cart')
           // handle next step here (e.g., navigate to menu)
         }}
       />

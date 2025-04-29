@@ -127,7 +127,7 @@ const Menu = () => {
 
   return (
     <div className="min-h-screen bg-[#FFFBF0] p-2">
-      <Header name={"Home"} onclick={() => navigate('/')} />
+      <Header name={"Home"} handleLogout={()=>navigate('/admindashboard')}/>
       
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header Section */}

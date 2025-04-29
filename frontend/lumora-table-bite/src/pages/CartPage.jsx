@@ -2,10 +2,7 @@ import React, { useState, useEffect } from 'react'
 import Header from '../components/Header'
 import menuBg from '../assets/viewmenu.jpg'
 import { FaShoppingCart } from 'react-icons/fa'
-
-const handleLogout = () => {
-    navigate('/');
-  };
+import { useNavigate } from 'react-router-dom';
 
 const CUISINE_MAP = {
   SRI_LANKAN: 'Sri Lankan',
@@ -16,6 +13,7 @@ const CUISINE_MAP = {
 const CartPage = () => {
   const [foodItems, setFoodItems] = useState([]);
   const [selectedCuisine, setSelectedCuisine] = useState('SRI_LANKAN');
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetch('http://localhost:8095/api/v1/foods/all')
@@ -41,7 +39,7 @@ const CartPage = () => {
             className="w-full h-full object-cover"
             />
             <div className="absolute top-0 left-0 right-0 p-2">
-            <Header name={"Log out"} onclick={handleLogout}/>
+            <Header name={"Log out"} handleLogout={()=>navigate('/select-table')}/>
             </div>
             <div className="absolute inset-0 flex flex-col items-center pt-32">
                 <div className="w-full max-w-screen">

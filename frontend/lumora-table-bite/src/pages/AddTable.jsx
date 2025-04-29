@@ -169,7 +169,7 @@ const AddTable = () => {
   if (isLoading || isTestingConnection) {
     return (
       <div className="min-h-screen bg-[#FFFBF0] p-2">
-        <Header name={"Home"} onclick={() => navigate('/')} />
+        <Header name={"Home"} handleLogout={() => navigate('/')} />
         <div className="flex items-center justify-center h-screen">
           <div className="flex flex-col items-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#4B2E1E] mb-4"></div>
@@ -185,7 +185,7 @@ const AddTable = () => {
   if (error) {
     return (
       <div className="min-h-screen bg-[#FFFBF0] p-2">
-        <Header name={"Home"} onclick={() => navigate('/')} />
+        <Header name={"Home"} handleLogout={() => navigate('/')} />
         <div className="flex flex-col items-center justify-center h-screen">
           <div className="text-xl text-red-600 mb-4">{error}</div>
           <div className="flex space-x-4">
@@ -209,7 +209,7 @@ const AddTable = () => {
 
   return (
     <div className="min-h-screen bg-[#FFFBF0] p-2">
-      <Header name={"Home"} onclick={() => navigate('/')} />
+      <Header name={"Home"} handleLogout={()=>navigate('/admindashboard')} />
       
       <div className="max-w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {/* Header Section */}
