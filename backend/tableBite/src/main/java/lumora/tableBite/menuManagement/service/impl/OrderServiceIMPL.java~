@@ -2,9 +2,7 @@ package lumora.tableBite.menuManagement.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lumora.tableBite.menuManagement.dto.OrderDTO;
-import lumora.tableBite.menuManagement.dto.OrderItemDTO;
 import lumora.tableBite.menuManagement.entity.Order;
-import lumora.tableBite.menuManagement.entity.OrderItem;
 import lumora.tableBite.menuManagement.exception.ResourceNotFoundException;
 import lumora.tableBite.menuManagement.repo.OrderRepo;
 import lumora.tableBite.menuManagement.service.OrderService;
@@ -16,7 +14,7 @@ import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
-public class OrderServiceIMPL implements OrderService {
+public class OrderServiceImpl implements OrderService {
 
     private final OrderRepo orderRepository;
     private final ModelMapper modelMapper;
@@ -24,13 +22,7 @@ public class OrderServiceIMPL implements OrderService {
     @Override
     public OrderDTO createOrder(OrderDTO orderDTO) {
         Order order = modelMapper.map(orderDTO, Order.class);
-        order.setOrderDate(java.time.LocalDateTime.now());
-
-        // Set the relationship between Order and OrderItems
-        if (order.getItems() != null) {
-            order.getItems().forEach(item -> item.setOrder(order));
-        }
-
+        order.setOrderDate(java.time.LocalDateTime.now()); // setting orderDate automatically if needed
         Order savedOrder = orderRepository.save(order);
         return modelMapper.map(savedOrder, OrderDTO.class);
     }
@@ -58,17 +50,9 @@ public class OrderServiceIMPL implements OrderService {
         existingOrder.setCustomerId(orderDTO.getCustomerId());
         existingOrder.setStatus(orderDTO.getStatus());
         existingOrder.setTotalAmount(orderDTO.getTotalAmount());
-
-        // Update items properly
-        List<OrderItem> updatedItems = orderDTO.getItems().stream()
-                .map(itemDTO -> {
-                    OrderItem orderItem = modelMapper.map(itemDTO, OrderItem.class);
-                    orderItem.setOrder(existingOrder); // very important
-                    return orderItem;
-                })
-                .collect(Collectors.toList());
-
-        existingOrder.setItems(updatedItems);
+        existingOrder.setFoods(orderDTO.getItems().stream()
+                .map(itemDTO -> modelMapper.map(itemDTO, lumora.tableBite.menuManagement.entity.OrderItem.class))
+                .collect(Collectors.toList()));
 
         Order updatedOrder = orderRepository.save(existingOrder);
         return modelMapper.map(updatedOrder, OrderDTO.class);

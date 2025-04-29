@@ -9,6 +9,8 @@ import lumora.tableBite.menuManagement.entity.enums.Status;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,7 +21,7 @@ public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long orderId;
+    private Long orderId;
 
     private String customerName;
     private LocalDate date;
@@ -38,5 +40,13 @@ public class Order {
     @JoinColumn(name = "table_id")
     private Table table;
 
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items;
+
+    public void setCustomerId(Long customerId) {
+    }
+
+    public void setOrderDate(LocalDateTime now) {
+    }
 
 }

@@ -1,0 +1,12 @@
+package lumora.tableBite.menuManagement.service;
+
+import lumora.tableBite.menuManagement.dto.OrderDTO;
+import lumora.tableBite.menuManagement.entity.Order;
+
+import java.util.List;
+
+public interface OrderService {
+    Order placeOrder(Long userId);
+    OrderDTO getOrder(Long orderId);
+    OrderDTO convertToDTO(Order order);
+}
